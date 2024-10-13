@@ -1,6 +1,9 @@
 package com.pontovirtual.sistemadeponto.dto;
 
-public record UserRequestDTO(String name, String cpf, String cargo) {
+import jakarta.validation.constraints.NotBlank;
+
+
+public record UserRequestDTO(@NotBlank String name, @NotBlank String cpf, @NotBlank String cargo) {
 
 
 }

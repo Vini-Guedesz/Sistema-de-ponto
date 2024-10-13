@@ -1,7 +1,11 @@
 package com.pontovirtual.sistemadeponto.repository;
 
-import com.pontovirtual.sistemadeponto.model.User;
+import com.pontovirtual.sistemadeponto.model.UserModel;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+import java.util.UUID;
+
+@Repository
+public interface UserRepository extends JpaRepository<UserModel, UUID> {
 }

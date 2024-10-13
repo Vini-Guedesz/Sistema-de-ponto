@@ -2,13 +2,18 @@ package com.pontovirtual.sistemadeponto.controller;
 
 import com.pontovirtual.sistemadeponto.dto.UserRequestDTO;
 import com.pontovirtual.sistemadeponto.dto.UserResponseDTO;
-import com.pontovirtual.sistemadeponto.model.User;
+import com.pontovirtual.sistemadeponto.model.UserModel;
 import com.pontovirtual.sistemadeponto.repository.UserRepository;
+import jakarta.validation.Valid;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/user")
@@ -19,10 +24,10 @@ public class UserController {
 
 
     @PostMapping
-    public ResponseEntity<UserResponseDTO> saveUser(@RequestBody UserRequestDTO data) {
-        User userData = new User(data);
-        User savedUser = userRepository.save(userData);
-        return ResponseEntity.status(201).body(new UserResponseDTO(savedUser));
+    public ResponseEntity<UserModel> saveUser(@RequestBody @Valid UserRequestDTO data) {
+        UserModel userModelData = new UserModel();
+        BeanUtils.copyProperties(data, userModelData);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userRepository.save(userModelData));
     }
 
 
@@ -32,7 +37,38 @@ public class UserController {
         if (userList.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(userList);
+        return ResponseEntity.status(HttpStatus.OK).body(userList);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> getOneUser(@PathVariable(value = "id") UUID id ) {
+        Optional<UserModel> user = userRepository.findById(id);
+        if(user.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(user.get());
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> updateUser(@PathVariable(value = "id") UUID id, @RequestBody @Valid UserRequestDTO data) {
+        Optional<UserModel> userOptional = userRepository.findById(id);
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
+        }
+
+        UserModel existingUser = userOptional.get();
+        BeanUtils.copyProperties(data, existingUser, "id");
+        return ResponseEntity.status(HttpStatus.OK).body(userRepository.save(existingUser));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteUser(@PathVariable(value = "id") UUID id) {
+        Optional<UserModel> userOptional = userRepository.findById(id);
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
+        }
+        userRepository.deleteById(userOptional.get().getId());
+        return ResponseEntity.status(HttpStatus.OK).body("User deleted successfully.");
     }
 
 }

@@ -1,10 +1,13 @@
 package com.pontovirtual.sistemadeponto.dto;
 
-import com.pontovirtual.sistemadeponto.model.User;
+import com.pontovirtual.sistemadeponto.model.UserModel;
+import jakarta.validation.constraints.NotBlank;
 
-public record UserResponseDTO(Long id, String name, String cpf, String cargo) {
+import java.util.UUID;
 
-    public UserResponseDTO(User user) {
-        this(user.getId(), user.getName(), user.getCpf(), user.getCargo());
+public record UserResponseDTO(UUID id,String name,String cpf,String cargo) {
+
+    public UserResponseDTO(UserModel userModel) {
+        this(userModel.getId(), userModel.getName(), userModel.getCpf(), userModel.getCargo());
     }
 }
