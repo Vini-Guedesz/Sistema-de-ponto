@@ -7,8 +7,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.UUID;
 
-
-@Table(name = "TB_USER")
+@Table(name = "tb_user")
 @Entity(name = "user")
 @Getter
 @Setter
@@ -25,12 +24,12 @@ public class UserModel implements Serializable {
 
     private String name;
     private String cpf;
-    private String cargo;
+    private String role;
 
     public UserModel(UserRequestDTO data) {
         this.name = data.name();
         this.cpf = data.cpf();
-        this.cargo = data.cargo();
+        this.role = data.role();
     }
 
 }

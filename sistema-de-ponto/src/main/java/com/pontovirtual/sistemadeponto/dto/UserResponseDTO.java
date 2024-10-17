@@ -5,9 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 
 import java.util.UUID;
 
-public record UserResponseDTO(UUID id,String name,String cpf,String cargo) {
+public record UserResponseDTO(UUID id,String name,String cpf,String role) {
 
     public UserResponseDTO(UserModel userModel) {
-        this(userModel.getId(), userModel.getName(), userModel.getCpf(), userModel.getCargo());
+        this(userModel.getId(), userModel.getName(), userModel.getCpf(), userModel.getRole());
     }
 }

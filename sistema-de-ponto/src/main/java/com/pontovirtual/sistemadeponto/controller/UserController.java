@@ -30,7 +30,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userRepository.save(userModelData));
     }
 
-
     @GetMapping
     public ResponseEntity<List<UserResponseDTO>> getAll() {
         List<UserResponseDTO> userList = userRepository.findAll().stream().map(UserResponseDTO::new).toList();
